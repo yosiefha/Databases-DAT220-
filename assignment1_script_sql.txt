@@ -1,0 +1,78 @@
+use ass1;
+CREATE TABLE Company (
+    OrgNumber INT NOT NULL,
+    OrganizationName varchar(255) NOT NULL,
+    PRIMARY KEY(OrgNumber)
+);
+
+CREATE TABLE BRANCH (
+    BranchId INT NOT NULL,
+    BranchName varchar(255) NOT NULL,
+    OrgNumber INT,
+    City varchar(50),
+    Street varchar(255),
+    ZipCode varchar(6),
+    Telephone varchar(14),
+    PRIMARY KEY(BranchId),
+    FOREIGN KEY (OrgNumber) REFERENCES COMPANY(OrgNumber)
+);
+
+
+CREATE TABLE Customer(
+    CustomerID INT  NOT NULL,
+    CustomerName varchar (30),
+    City varchar(50),
+    Street varchar(255),
+    Telephone varchar(14),
+    BranchId INT,
+    PRIMARY KEY(CustomerID),
+    FOREIGN KEY (BranchId)  REFERENCES BRANCH(BRANCHId)
+
+);
+
+CREATE TABLE Service(
+    ServiceID INT NOT NULL,
+    serviceName varchar(35),
+    ServiceDuration FLOAT not null,
+    price FLOAT ,
+    BranchId INT,
+    PRIMARY KEY(ServiceID),
+    FOREIGN KEY (BranchId)  REFERENCES BRANCH(BRANCHId)
+
+);  
+
+CREATE TABLE CustomerServiceTable (
+    CustomerId INT NOT NULL,
+    ServiceID INT NOT NULL,
+    
+    PRIMARY KEY (CustomerId, ServiceID),
+    FOREIGN KEY (CustomerId) REFERENCES Customer(CustomerId),
+    FOREIGN KEY (ServiceID) REFERENCES Service(ServiceID),
+    UNIQUE (CustomerID, ServiceID)
+
+);
+
+CREATE TABLE Employee(
+    EmployeeID INT NOT NULL ,
+    FirstName varchar(30)  NOT NULL,
+    LastName varchar(50),
+    DateOfBirth DATE  NOT NULL,
+    Role varchar(255) NOT NULL ,
+    StartingDate date,
+    Age INT,
+    Sex varchar(6),
+    Salary FLOAT,
+    BranchId INT,
+    PRIMARY KEY(EmployeeID),
+    FOREIGN KEY (BranchId)  REFERENCES BRANCH(BranchId)
+);
+
+
+CREATE TABLE CustomerEmployeeTable(
+    CustomerId INT NOT NULL,
+    EmployeeID INT NOT NULL,
+    PRIMARY KEY (CustomerId, EmployeeID),
+    FOREIGN KEY (CustomerId) REFERENCES Customer(CustomerId),
+    FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID),
+    UNIQUE (CustomerID, EmployeeID)
+);

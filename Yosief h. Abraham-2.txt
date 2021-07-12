@@ -1,0 +1,214 @@
+--#6
+CREATE DATABASE Assignment2;
+USE Assignment2;
+CREATE TABLE Branch (
+    BranchManagerId INT NOT NULL,
+    BranchName VARCHAR(100) NOT NULL,
+    BranchAddress VARCHAR(150) NOT NULL,   
+    PRIMARY KEY(BranchManagerId)
+);
+CREATE TABLE Customer(
+    CustomerId INT  NOT NULL,
+    CustomerName VARCHAR (50) NOT NULL,
+    CustomerAddress VARCHAR(150) NOT NULL,
+    PhoneNumber VARCHAR(20) NOT NULL,
+    ANOTherPhoneNumber VARCHAR(20) NULL,
+    Date DATE NOT NULL,
+    PRIMARY KEY(CustomerId)
+);
+CREATE TABLE EmployeeInfo (
+	EmployeeId INT NOT NULL,
+    EmployeeName VARCHAR (100) NOT NULL,
+    HourlySalary INT  NOT NULL,
+    Sex VARCHAR (10) NOT NULL,
+    DateOfBirth DATE NOT NULL,
+    SupervisorId INT  NOT NULL,
+    BranchManagerId INT NOT NULL,
+    ManagingSince DATE NULL,
+    PRIMARY KEY(EmployeeId ASC) ,
+    CONSTRAINT Fk_Branch_BranchManagerId FOREIGN KEY (BranchManagerId) REFERENCES Branch (BranchManagerId)
+);
+CREATE TABLE EmployeeWorkLog(
+	EmployeeId INT NOT NULL REFERENCES EmployeeInfo,
+    CustomerId INT NOT NULL REFERENCES Customer,
+    ProjectDurationHours INT NOT NULL,	
+    HandlerBranch VARCHAR(50) NOT NULL,
+    CONSTRAINT Pk_EmployeeWorkLog_EmployeeCustomer PRIMARY KEY (EmployeeId, CustomerId)  
+);
+
+--#7
+INSERT INTO Branch
+           (BranchManagerId,BranchName,BranchAddress)
+     VALUES
+           (2,'Illinois', '3398 Braxton Street'),
+           (1, 'Seattle', '3862 Mutton Town Road'),
+		   (123,'California', '93401 San Luis Obispo');
+  
+INSERT INTO Customer
+           (CustomerId,CustomerName,CustomerAddress,PhoneNumber, ANOTherPhoneNumber,Date)
+     VALUES	
+		(1, 'Estele Petruk', '3 Raven Street', '(37)161-8336',NULL, '2010-04-16'),
+		(2, 'Bidget Dobrovsky', '174 Ramsey Circle', '(55)183-9994',NULL, '2011-07-05'),
+		(3, 'Corette LAShmore', '3 Raven Street', '(37)161-8336', NULL,'2010-04-16'),
+		(4, 'Walter Brown', '803 Arroyo Lane', '(95)918-8942','(87)411-3197', '2010-01-09'),
+		(5, 'Martin K Pry', '23 Hary Place', '(86)843-6110',NULL, '2010-04-02'),
+        (6,'Thebault BalASin','6715 ShASta Lane','(54) 467-6802',NULL,'2017-10-03'),
+        (7,'Tanitansy Utteridge','6 Talmadge Hill','(25) 010-1897',NULL,'2016-10-15'),
+        (9, 'Suzanne Davis', '3366 Chardonnay Drive', '(73)847-3446',NULL, '2010-04-16'),
+        (10,'Alecia Banisch','56573 HINTze Lane','(29) 883-2203',NULL,'2015-11-09');
+
+INSERT INTO EmployeeInfo
+           (EmployeeId,EmployeeName,HourlySalary,Sex,
+	       DateOfBirth,SupervisorId,BranchManagerId,ManagingSince)
+     VALUES
+       (124, 'Rick AStley', 18, 'M', '1966-06-02', 64, 2, NULL ),
+       (137, 'Morty Smith', 18, 'M', '1976-05-24', 11, 1, NULL),
+       (131, 'Dorothy Golden', 18, 'F', '1969-08-30', 64, 2, NULL),
+       (64, 'Catherine Gondalez', 20, 'F', '1959-11-24', 11, 2, NULL ),
+       (76, 'satoshi Nakamoto', 18, 'M', '1975-08-25', 11, 2, NULL ),
+       (77, 'John Lewis', 17, 'M', '1998-03-05', 64, 1, NULL ),
+       (65, 'Russell Bueno', 17, 'F', '1966-04-25', 64, 1, NULL ),
+       (123, 'Kristie Clark', 30, 'F', '1975-05-09', 2, 123, '2010-05-17' ),
+       (122, 'Lynda Brumbaugh', 24, 'F', '1962-05-02', 15, 1, NULL ),
+       (1, 'Mr Meeseeks', 33, 'M', '1998-10-11', 1, 1, '2007-01-05' ),
+       (2, 'Rick Sanchez', 32, 'M', '1977-08-19', 1, 2, '2008-01-05' ),
+       (55, 'Jimmie BASsham', 23, 'F', '1969-01-04', 2, 123, NULL ),
+       (11, 'Cheryl Brya', 25, 'F', '1988-04-11', 123, 123, NULL ),       
+       (144, 'Glenda McCall', 18, 'F', '1995-06-27', 55, 123, NULL),
+       (101, 'Frank Whitney', 15, 'F', '1971-12-27', 55, 123, NULL),
+       (105, 'Hugh Alt', 15, 'M', '1999-04-05', 11, 123, NULL ),
+       (97, 'Roger Benson', 18, 'M', '1982-04-27', 15, 2, NULL ),
+       (66, 'Marcus Myers', 15, 'M', '1997-02-16', 64, 1, NULL ),
+       (5, 'Tracy Hilton', 18, 'F', '1978-09-17', 2, 1, NULL ),
+       (15, 'Margaret Fuller', 23, 'F', '1958-07-22', 15, 1, NULL ),
+       (35, 'Paul Staggs', 19, 'M', '1979-08-14', 1, 1, NULL ),
+       (98, 'Anthony WASton', 19, 'M', '1992-11-06', 123, 2, NULL ),
+       (89, 'James Goree', 17, 'M', '1989-11-13', 55, 2, NULL ),
+       (111, 'Viviana Jones', 18, 'F', '1975-09-10', 11, 123, NULL );
+
+INSERT INTO EmployeeWorkLog(EmployeeId,CustomerId,ProjectDurationHours, HandlerBranch )
+     VALUES
+       (124, 4, 12, 'Illinois'),
+       (124, 5, 12, 'Seattle'),
+       (137, 5, 12, 'Seattle'),
+       (137, 4, 56, 'Seattle'),
+       (131, 9, 45, 'Illinois'),
+       (64, 9, 45, 'Illinois'),
+       (144, 1, 40, 'California'),
+       (101, 2, 17, 'California'),
+       (11, 2, 17, 'California'),
+       (65, 3, 56, 'Seattle'),
+       (77, 10, 32, 'Illinois'),
+       (137, 10, 32, 'Illinois'),
+       (1, 10, 32, 'Illinois'),
+       (66, 7, 50, 'Seattle'),
+       (89, 6, 41, 'Illinois'),
+       (98, 6, 41, 'Illinois');
+       
+--#8
+INSERT INTO EmployeeWorkLog
+			(EmployeeId, CustomerId, ProjectDurationHours, HandlerBranch)
+     VALUES(64, 4, 45, 'Illinois'),
+           (131, 4, 45, 'Illinois');
+
+--#9
+CREATE TABLE PAStManagers (
+    Action VARCHAR(50) NOT NULL,	
+	EmployeeId INT NOT NULL,       
+    BranchName VARCHAR(100) NOT NULL,
+    ManagingSince Date NULL
+   );
+   
+--#10
+DELIMITER $$
+   CREATE TRIGGER Manager_Update 
+    AFTER UPDATE ON EmployeeInfo 
+    FOR EACH ROW   
+     BEGIN
+    INSERT INTO PAStManagers (Action, EmployeeId, BranchName, ManagingSince)
+    SELECT 'Update'
+         , e.EmployeeId         
+         , b.BranchName
+         , NEW.ManagingSince
+		FROM employeeinfo e
+        INNER JOIN Branch b
+        ON e.BranchManagerId = b.BranchManagerId
+      WHERE e.EmployeeId = NEW.EmployeeId 
+      AND NEW.ManagingSince IS NOT NULL;
+  END$$
+DELIMITER $$
+  /*#11*/
+UPDATE  EmployeeInfo
+SET ManagingSince = '2015-03-14'
+WHERE EmployeeId = 64;
+
+UPDATE employeeinfo
+SET SupervisorId = 76
+WHERE EmployeeId IN (124, 131);
+
+--#12
+DELETE FROM  EmployeeWorkLog
+WHERE EmployeeId = 124 
+AND CustomerId = 5;
+
+--#13
+WITH EmployeesName AS (
+SELECT 
+		EmployeeId, EmployeeName
+    FROM
+        EmployeeInfo
+	),
+TotalProjectHoursOfEmployees  AS (
+    SELECT em.EmployeeId, SUM(em.ProjectDurationHours) AS ProjectDurationHours, em.HandlerBranch, emp.EmployeeName FROM employeeworklog AS em
+            INNER JOIN
+        EmployeesName AS emp ON em.EmployeeId = emp.EmployeeId
+        WHERE HandlerBranch = 'Illinois'
+        GROUP BY em.EmployeeId         
+),
+HighestEmployee AS (
+	SELECT *  FROM TotalProjectHoursOfEmployees
+    WHERE ProjectDurationHours = (SELECT MAX(ProjectDurationHours) FROM TotalProjectHoursOfEmployees)
+)
+SELECT  * FROM  HighestEmployee;
+
+--#14
+WITH CustomersInfo AS (
+SELECT 
+          CustomerId, phonenumber
+    FROM
+        Customer
+	),
+ServiceProvided AS (
+         SELECT el.CustomerId, SUM(el.ProjectDurationHours) AS ProjectDurationHour, totalHours.PhoneNumber from employeeworklog AS el
+            INNER JOIN
+        CustomersInfo AS totalHours 
+        ON el.CustomerId = totalHours.CustomerId
+        GROUP BY el.CustomerId         
+),
+LongestServiceProvided AS (
+	SELECT * FROM ServiceProvided
+    WHERE ProjectDurationHour = (SELECT MAX(ProjectDurationHour) FROM ServiceProvided)
+)
+SELECT * FROM LongestServiceProvided;
+
+--#15
+
+WITH SupervisorIds AS (
+      SELECT  DISTINCT SupervisorId, BranchManagerId FROM EmployeeInfo 
+		WHERE BranchManagerId = 2
+),
+SupervisorsNames AS (
+    SELECT 
+          EmployeeId, EmployeeName
+    FROM
+        EmployeeInfo AS em
+            INNER JOIN
+        SupervisorIds AS superv ON em.EmployeeId = superv.SupervisorId
+)
+SELECT  * FROM  SupervisorsNames
+ORDER BY EmployeeId;
+
+
+
+
+
